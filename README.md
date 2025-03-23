@@ -16,11 +16,13 @@ import OidcTools from 'oidc-tools';
 // Initialize the library with your OIDC configuration
 const issuerURL = process.env.OIDC_ISSUER_URL;
 const clientId = process.env.OIDC_CLIENT_ID;
+const clientSecret = process.env.OIDC_CLIENT_SECRET;
 const redirectUri = process.env.OIDC_REDIRECT_URI;
 
 const { decodeToken, getLoginUrl, exchangeToken } = await OidcTools({
   issuerURL,
   clientId,
+  clientSecret,
   redirectUri,
   // Optional: cache options
   cache: true,
@@ -80,6 +82,7 @@ You can create a `.env` file in your project root with these variables:
 ```
 OIDC_ISSUER_URL=https://your-oidc-provider/.well-known/openid-configuration
 OIDC_CLIENT_ID=your-client-id
+OIDC_CLIENT_SECRET=your-client-secret
 OIDC_REDIRECT_URI=https://your-app/callback
 ```
 
@@ -93,6 +96,7 @@ Initialize the OIDC tools library.
 
 - `issuerURL` (required): URL to the OIDC provider's well-known OpenID configuration.
 - `clientId` (optional): Your OAuth client ID, required for getLoginUrl.
+- `clientSecret` (optional): Your OAuth client secret for confidential clients.
 - `redirectUri` (optional): The URI to redirect to after authentication, required for getLoginUrl.
 - `scope` (optional): OAuth scopes to request. Default: `'openid profile email'`.
 - `cache` (optional): Boolean indicating whether to cache decoded tokens. Default: `true`.
