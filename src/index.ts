@@ -27,6 +27,7 @@ async function OidcTools(options: OidcToolsOptions): Promise<OidcToolsInstance> 
     cache = true,
     cacheDuration = DEFAULT_CACHE_DURATION,
     clientId,
+    clientSecret,
     redirectUri,
     scope = 'openid profile email',
     usePKCE = true
@@ -152,7 +153,9 @@ async function OidcTools(options: OidcToolsOptions): Promise<OidcToolsInstance> 
       throw new Error('Token endpoint not found in OIDC configuration');
     }
 
-    const { code, codeVerifier, clientSecret } = params;
+    const { code, codeVerifier, clientSecret: paramsClientSecret } = params;
+    // Use client secret from options or from params
+    const secretToUse = clientSecret || paramsClientSecret;
 
     const body = new URLSearchParams({
       grant_type: 'authorization_code',
@@ -171,8 +174,8 @@ async function OidcTools(options: OidcToolsOptions): Promise<OidcToolsInstance> 
     };
 
     // Add client authentication if client secret is provided
-    if (clientSecret) {
-      const auth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+    if (secretToUse) {
+      const auth = Buffer.from(`${clientId}:${secretToUse}`).toString('base64');
       headers['Authorization'] = `Basic ${auth}`;
     }
 

@@ -3,6 +3,7 @@ export interface OidcToolsOptions {
   cache?: boolean;
   cacheDuration?: number;
   clientId?: string;
+  clientSecret?: string;
   redirectUri?: string;
   scope?: string;
   usePKCE?: boolean;

@@ -14,6 +14,7 @@ async function main() {
   // Get the OIDC configuration from environment variables
   const issuerURL = process.env.OIDC_ISSUER_URL;
   const clientId = process.env.OIDC_CLIENT_ID;
+  const clientSecret = process.env.OIDC_CLIENT_SECRET;
   const redirectUri = process.env.OIDC_REDIRECT_URI || 'http://localhost:8088/callback';
 
   if (!issuerURL || !clientId) {
@@ -27,6 +28,7 @@ async function main() {
   const { decodeToken, getLoginUrl, exchangeToken } = await OidcTools({
     issuerURL,
     clientId,
+    clientSecret,
     redirectUri,
     usePKCE: true // Enable PKCE
   });
@@ -113,6 +115,7 @@ async function main() {
         const tokens = await exchangeToken({
           code,
           codeVerifier: session.codeVerifier
+          // Client secret is automatically used from OidcTools initialization
         });
 
         const { id_token } = tokens;
