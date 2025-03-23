@@ -18,7 +18,8 @@
     "build": "tsc",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "example": "node -r dotenv/config examples/basic-usage.js"
+    "example": "node -r dotenv/config examples/basic-usage.js",
+    "example:auth": "node -r dotenv/config examples/auth-flow.js"
   },
   "keywords": [
     "oidc",
