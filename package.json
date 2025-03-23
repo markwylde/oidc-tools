@@ -1,6 +1,6 @@
 {
   "name": "oidc-tools",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "OpenID Connect tools for token decoding and verification",
   "main": "dist/index.js",
   "type": "module",
