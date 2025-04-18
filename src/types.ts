@@ -22,6 +22,7 @@ export interface OidcToolsInstance {
     codeVerifier?: string;
     codeChallenge?: string;
   };
+  getLogoutUrl: (params?: { state?: string; postLogoutRedirectUri?: string }) => string;
   exchangeToken: (params: {
     code: string;
     codeVerifier?: string;

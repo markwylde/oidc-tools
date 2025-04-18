@@ -19,7 +19,7 @@ const clientId = process.env.OIDC_CLIENT_ID;
 const clientSecret = process.env.OIDC_CLIENT_SECRET;
 const redirectUri = process.env.OIDC_REDIRECT_URI;
 
-const { decodeToken, getLoginUrl, exchangeToken } = await OidcTools({
+const { decodeToken, getLoginUrl, exchangeToken, getLogoutUrl } = await OidcTools({
   issuerURL,
   clientId,
   clientSecret,
@@ -43,6 +43,12 @@ try {
 // Redirect user to the OAuth login page
 const { url, state, nonce, codeVerifier } = getLoginUrl();
 console.log(`Redirect user to: ${url}`);
+
+// Generate logout URL
+const logoutUrl = getLogoutUrl({
+  postLogoutRedirectUri: 'https://your-app/logged-out'
+});
+console.log(`Logout URL: ${logoutUrl}`);
 
 // In an http app, you could redirect like this:
 // res.writeHead(302, { 'Location': url });
@@ -140,6 +146,20 @@ An object containing:
 - `codeChallenge`: The PKCE code challenge (only if usePKCE is true)
 
 The state, nonce, and codeVerifier values should be stored in your session and verified when the user returns.
+
+### getLogoutUrl(params)
+
+Generates a URL to log the user out of the OAuth provider's session.
+
+**Parameters:**
+
+- `params` (optional): Object containing the following optional properties:
+  - `state` (string): Optional state value. If not provided, a secure random value will be generated.
+  - `postLogoutRedirectUri` (string): Optional URI to redirect to after logout. If not provided, the redirectUri from initialization will be used.
+
+**Returns:**
+
+A string URL to redirect the user to for logout.
 
 ### exchangeToken(params)
 
