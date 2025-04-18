@@ -37,8 +37,8 @@
     "jose": "^6.0.10"
   },
   "devDependencies": {
-    "@types/node": "^22.13.11",
-    "dotenv": "^16.4.7",
-    "typescript": "^5.8.2"
+    "@types/node": "^22.14.1",
+    "dotenv": "^16.5.0",
+    "typescript": "^5.8.3"
   }
 }

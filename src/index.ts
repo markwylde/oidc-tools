@@ -1,6 +1,6 @@
 import * as jose from 'jose';
 import { OidcToolsOptions, OidcToolsInstance, JwtPayload } from './types.js';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 // Simple cache implementation
 const tokenCache = new Map<string, { payload: JwtPayload; timestamp: number }>();
@@ -128,6 +128,25 @@ async function OidcTools(options: OidcToolsOptions): Promise<OidcToolsInstance> 
     };
   };
 
+  // Function to build the OAuth logout URL
+  const getLogoutUrl = (params?: { state?: string; postLogoutRedirectUri?: string }) => {
+    if (!issuerURL) {
+      throw new Error('issuerURL is required to generate a logout URL');
+    }
+
+    const endSessionEndpoint = config.end_session_endpoint;
+    if (!endSessionEndpoint) {
+      throw new Error('End session endpoint not found in OIDC configuration');
+    }
+
+    const searchParams = new URLSearchParams({
+      post_logout_redirect_uri: params?.postLogoutRedirectUri || redirectUri || '',
+      state: params?.state ?? generateSecureRandomString(),
+    });
+
+    return `${endSessionEndpoint}?${searchParams.toString()}`;
+  };
+
   // Function to exchange authorization code for tokens
   const exchangeToken = async (params: {
     code: string;
@@ -196,6 +215,7 @@ async function OidcTools(options: OidcToolsOptions): Promise<OidcToolsInstance> 
   return {
     decodeToken,
     getLoginUrl,
+    getLogoutUrl,
     exchangeToken,
   };
 }
